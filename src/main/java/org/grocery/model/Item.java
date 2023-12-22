@@ -1,15 +1,26 @@
 package org.grocery.model;
 
+import java.sql.Blob;
 import java.util.Objects;
 
 public class Item {
 
-    String itemId;
+    int itemId;
     String itemCode;
     String itemName;
     String batchNumber;
 
     String imagePath;
+
+    Blob image;
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
+    }
 
     public String getImagePath() {
         return imagePath;
@@ -19,11 +30,11 @@ public class Item {
         this.imagePath = imagePath;
     }
 
-    public String getItemId() {
+    public int getItemId() {
         return itemId;
     }
 
-    public void setItemId(String itemId) {
+    public void setItemId(int itemId) {
         this.itemId = itemId;
     }
 

@@ -71,9 +71,9 @@ public class AddItemView extends JFrame {
 
         // Save and Cancel Buttons
         saveButton = new JButton("Save Product");
-        updateButton =new JButton("Update Product");
-        deleteButton =new JButton("Delete Product");
-        searchButton =new JButton("Search Product");
+        updateButton = new JButton("Update Product");
+        deleteButton = new JButton("Delete Product");
+        searchButton = new JButton("Search Product");
         cancelButton = new JButton("Exit");
 
         // Image Viewer
@@ -136,54 +136,50 @@ public class AddItemView extends JFrame {
         gbc.gridy = 7;
         mainPanel.add(cancelButton, gbc);
 
-        // Action listener for Browse Button
-        browseImageButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                fileChooser.setAcceptAllFileFilterUsed(false);
-                fileChooser.addChoosableFileFilter(new ImageFileFilter());
+        searchButton.addActionListener(e -> new SearchProductView());
 
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());
-                    Image image = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-                    imageViewer.setIcon(new ImageIcon(image));
-                    removeImageButton.setEnabled(true);
-                }
+        // Action listener for Browse Button
+        browseImageButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.addChoosableFileFilter(new ImageFileFilter());
+
+            int returnValue = fileChooser.showOpenDialog(null);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());
+                Image image = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+                imageViewer.setIcon(new ImageIcon(image));
+                removeImageButton.setEnabled(true);
             }
         });
 
         // Action listener for Remove Button
-        removeImageButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                imageViewer.setIcon(defaultImage);
-                removeImageButton.setEnabled(false);
-            }
+        removeImageButton.addActionListener(e -> {
+            imageViewer.setIcon(defaultImage);
+            removeImageButton.setEnabled(false);
         });
 
         // Action listener for Save Button
-        saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Implement save logic here
-                // This is where you'd save the product details entered
-                // For now, let's just display a message
-                final Item item=new Item();
-                item.setItemName(productNameField.getText());
-                item.setItemCode(productCodeField.getText());
-                item.setBatchNumber(batchNumberField.getText());
-                item.setImagePath(imageViewer.getIcon().toString());
-                ItemDao itemDao = new ItemDaoImpl();
-                try {
-                    int add = itemDao.add(item);
-                    JOptionPane.showMessageDialog(null, "Product Saved!","", add);
-                } catch (FileNotFoundException | SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Product Not Saved!","", JOptionPane.ERROR_MESSAGE);
-                }
-
-
+        saveButton.addActionListener(e -> {
+            // Implement save logic here
+            // This is where you'd save the product details entered
+            // For now, let's just display a message
+            final Item item = new Item();
+            item.setItemName(productNameField.getText());
+            item.setItemCode(productCodeField.getText());
+            item.setBatchNumber(batchNumberField.getText());
+            item.setImagePath(imageViewer.getIcon().toString());
+            ItemDao itemDao = new ItemDaoImpl();
+            try {
+                int add = itemDao.add(item);
+                JOptionPane.showMessageDialog(null, "Product Saved!", "", add);
+            } catch (FileNotFoundException | SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Product Not Saved!", "", JOptionPane.ERROR_MESSAGE);
             }
+
+
         });
 
         // Action listener for Cancel Button
