@@ -10,11 +10,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 public class AddItemView extends JFrame {
     private JTextField productNameField;
     private JTextField productCodeField;
+
+    private JTextField batchNumberField;
     private JButton browseImageButton;
     private JButton removeImageButton;
     private JButton saveButton;
@@ -34,7 +37,7 @@ public class AddItemView extends JFrame {
 
     private void initializeUI() {
         setTitle("Add Item");
-        setSize(700, 700);
+        setSize(700, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setIconImage(new ImageIcon("src/main/resources/apple.png").getImage());
 
@@ -53,6 +56,11 @@ public class AddItemView extends JFrame {
         JLabel productCodeLabel = new JLabel("Product Code:");
         productCodeField = new JTextField();
         productCodeField.setPreferredSize(new Dimension(200, 25));
+
+        // Product Name
+        JLabel batchNumberLabel = new JLabel("Batch Number:");
+        batchNumberField = new JTextField();
+        batchNumberField.setPreferredSize(new Dimension(200, 25));
 
         // Image Browse Button
         browseImageButton = new JButton("Browse");
@@ -97,28 +105,35 @@ public class AddItemView extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
+        mainPanel.add(batchNumberLabel, gbc);
+
+        gbc.gridx = 1;
+        mainPanel.add(batchNumberField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         mainPanel.add(browseImageButton, gbc);
 
         gbc.gridx = 1;
         mainPanel.add(removeImageButton, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         mainPanel.add(saveButton, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         mainPanel.add(updateButton, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         mainPanel.add(deleteButton, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         mainPanel.add(searchButton, gbc);
 
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         mainPanel.add(cancelButton, gbc);
 
         // Action listener for Browse Button
@@ -154,15 +169,16 @@ public class AddItemView extends JFrame {
                 // Implement save logic here
                 // This is where you'd save the product details entered
                 // For now, let's just display a message
-                Item item=new Item();
-                item.setItemName("ABC");
-                item.setItemCode("code");
-                item.setBatchNumber("batchNumber");
+                final Item item=new Item();
+                item.setItemName(productNameField.getText());
+                item.setItemCode(productCodeField.getText());
+                item.setBatchNumber(batchNumberField.getText());
+                item.setImagePath(imageViewer.getIcon().toString());
                 ItemDao itemDao = new ItemDaoImpl();
                 try {
                     int add = itemDao.add(item);
                     JOptionPane.showMessageDialog(null, "Product Saved!","", add);
-                } catch (SQLException ex) {
+                } catch (FileNotFoundException | SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Product Not Saved!","", JOptionPane.ERROR_MESSAGE);
                 }
 

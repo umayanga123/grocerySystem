@@ -9,6 +9,16 @@ public class Item {
     String itemName;
     String batchNumber;
 
+    String imagePath;
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public String getItemId() {
         return itemId;
     }
